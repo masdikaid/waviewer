@@ -1,0 +1,27 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# User WhatsApp databases & keys (protect privacy)
+*.crypt
+*.crypt12
+*.crypt14
+*.crypt15
+*.db
+*.sqlite
+*.sqlite3
+key
+*.key
+
+# Local media test files
+/Media/
+/WhatsApp/
+*.zip
+
+# Node
+node_modules/
+.npm/
+
+# IDE
+.idea/
+.vscode/

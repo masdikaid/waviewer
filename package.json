@@ -1,0 +1,21 @@
+{
+  "name": "waviewer",
+  "version": "1.0.0",
+  "description": "Interactive WhatsApp Database Viewer (msgstore.db, crypt12, crypt14, crypt15) with authentic WhatsApp Web UI",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve . -l 3000",
+    "dev": "npx -y serve . -l 3000"
+  },
+  "keywords": [
+    "whatsapp",
+    "database-viewer",
+    "msgstore",
+    "crypt14",
+    "crypt12",
+    "crypt15",
+    "sqlite"
+  ],
+  "author": "Antigravity",
+  "license": "MIT"
+}

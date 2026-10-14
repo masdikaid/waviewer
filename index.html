@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Database Viewer - Open msgstore.db & Crypt Files Interactively</title>
+  <meta name="description"
+    content="Interactive web app to open, decrypt, and view WhatsApp chat history from msgstore.db, crypt12, crypt14, and crypt15 databases with an authentic WhatsApp Web UI. 100% Client-Side and private.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Favicon WhatsApp Style SVG -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%2325D366' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z'/></svg>">
+</head>
+
+<body>
+  <div class="app-container" id="app">
+    <!-- Top Global Header -->
+    <header class="global-nav">
+      <div class="brand-section">
+        <svg class="wa-logo-icon" viewBox="0 0 448 512">
+          <path
+            d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+        </svg>
+        <span class="brand-title">WhatsApp DB Viewer <span class="brand-badge">Client-Side</span></span>
+      </div>
+
+      <div class="nav-actions">
+        <div class="privacy-pill"
+          title="All data is processed inside your browser without ever being sent to any server">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+          </svg>
+          <span>100% Private &amp; Secure</span>
+        </div>
+
+        <button class="icon-btn" id="btnThemeToggle" title="Toggle Dark / Light Theme">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <path
+              d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
+          </svg>
+        </button>
+
+        <button class="btn-secondary" id="btnChangeDb" style="display: none;"
+          title="Close current database and upload a new one">
+          <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          </svg>
+          <span>Change Database</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ======================================================================
+         VIEW 1: UPLOAD & GUIDE VIEW (SHOWN BY DEFAULT)
+         ====================================================================== -->
+    <main class="view-upload" id="viewUpload">
+      <div class="upload-card-wrapper">
+        <div class="hero-box">
+          <h1>Open &amp; Read Your WhatsApp Database</h1>
+          <p>Upload your WhatsApp database file (<code>msgstore.db</code> or encrypted <code>.crypt12/14/15</code>
+            files) to interactively explore full chat histories.</p>
+        </div>
+
+        <!-- Main Database Dropzone -->
+        <div class="dropzone-container" id="dbDropzone">
+          <input type="file" id="dbFileInput" class="file-input-hidden"
+            accept=".db,.sqlite,.sqlite3,.crypt12,.crypt14,.crypt15">
+          <div class="dropzone-icon-circle">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
+            </svg>
+          </div>
+          <h2 class="dropzone-title">Drag &amp; Drop Database File Here</h2>
+          <p class="dropzone-subtitle">or click the button below to browse files from your computer</p>
+          <button class="btn-primary" id="btnBrowseDb" type="button">
+            <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24">
+              <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+            </svg>
+            Choose Database File
+          </button>
+
+          <div class="supported-chips">
+            <span class="chip">msgstore.db</span>
+            <span class="chip">msgstore.db.crypt15</span>
+            <span class="chip">msgstore.db.crypt14</span>
+            <span class="chip">msgstore.db.crypt12</span>
+            <span class="chip">.sqlite</span>
+          </div>
+        </div>
+
+        <!-- Demo Preview Banner -->
+        <div class="demo-banner">
+          <div class="demo-banner-content">
+            <div class="demo-banner-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+              </svg>
+            </div>
+            <div class="demo-banner-text">
+              <h4>Don't have a database file or want to try first?</h4>
+              <p>Explore a simulated WhatsApp Web experience complete with voice notes, groups, photos, and documents.
+              </p>
+            </div>
+          </div>
+          <button class="btn-primary" id="btnLoadDemo" type="button">
+            Try Demo 🚀
+          </button>
+        </div>
+
+        <!-- Comprehensive Guide / Tutorial -->
+        <section class="guide-container">
+          <div class="guide-header">
+            <h3>
+              <svg style="width: 20px; height: 20px; fill: var(--wa-green-primary);" viewBox="0 0 24 24">
+                <path
+                  d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+              </svg>
+              Guide: How to Obtain WhatsApp Database &amp; Key
+            </h3>
+          </div>
+
+          <div class="guide-tabs">
+            <button class="guide-tab-btn active" data-tab="tab-root">1. Android Root (Easiest)</button>
+            <button class="guide-tab-btn" data-tab="tab-crypt">2. Non-Root (Crypt File)</button>
+            <button class="guide-tab-btn" data-tab="tab-key">3. How to Get the Key</button>
+            <button class="guide-tab-btn" data-tab="tab-faq">4. Security &amp; FAQ</button>
+          </div>
+
+          <!-- Tab 1: Android Root -->
+          <div class="guide-tab-content" id="tab-root">
+            <div class="guide-step-list">
+              <div class="guide-step-item">
+                <div class="step-number">1</div>
+                <div class="step-details">
+                  <h4>Original Database Location (msgstore.db)</h4>
+                  <p>On rooted Android devices, the unencrypted SQLite database is stored directly in the system
+                    directory:</p>
+                  <div class="code-box">
+                    <span>/data/data/com.whatsapp/databases/msgstore.db</span>
+                    <button class="btn-copy-code" data-copy="/data/data/com.whatsapp/databases/msgstore.db"
+                      title="Copy Path">Copy</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">2</div>
+                <div class="step-details">
+                  <h4>Key File Location (key)</h4>
+                  <p>The 158-byte WhatsApp AES encryption key file is stored in WhatsApp's private directory:</p>
+                  <div class="code-box">
+                    <span>/data/data/com.whatsapp/files/key</span>
+                    <button class="btn-copy-code" data-copy="/data/data/com.whatsapp/files/key"
+                      title="Copy Path">Copy</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">3</div>
+                <div class="step-details">
+                  <h4>How to Pull Files Using ADB (Computer)</h4>
+                  <p>Connect your Android phone to your computer with USB Debugging enabled, then run the following
+                    terminal command:</p>
+                  <div class="code-box">
+                    <span>adb root &amp;&amp; adb pull /data/data/com.whatsapp/databases/msgstore.db .</span>
+                    <button class="btn-copy-code"
+                      data-copy="adb root &amp;&amp; adb pull /data/data/com.whatsapp/databases/msgstore.db ."
+                      title="Copy Command">Copy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Non-Root (Crypt) -->
+          <div class="guide-tab-content" id="tab-crypt" style="display: none;">
+            <div class="guide-step-list">
+              <div class="guide-step-item">
+                <div class="step-number">1</div>
+                <div class="step-details">
+                  <h4>Crypt Backup Location in Internal Storage</h4>
+                  <p>WhatsApp automatically creates daily local backups formatted as <code>.crypt14</code> or
+                    <code>.crypt15</code> in internal storage:
+                  </p>
+                  <div class="code-box">
+                    <span>/sdcard/Android/media/com.whatsapp/WhatsApp/Databases/msgstore.db.crypt14</span>
+                    <button class="btn-copy-code"
+                      data-copy="/sdcard/Android/media/com.whatsapp/WhatsApp/Databases/msgstore.db.crypt14"
+                      title="Copy Path">Copy</button>
+                  </div>
+                  <p style="margin-top: 8px;">(For Android 10 and below:
+                    <code>/sdcard/WhatsApp/Databases/msgstore.db.crypt12</code>)
+                  </p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">2</div>
+                <div class="step-details">
+                  <h4>Copy File to Computer</h4>
+                  <p>Use a USB data cable or a file manager app on your phone to copy the latest
+                    <code>msgstore.db.crypt14</code> file to your computer.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: How to Get Key -->
+          <div class="guide-tab-content" id="tab-key" style="display: none;">
+            <div class="guide-step-list">
+              <div class="guide-step-item">
+                <div class="step-number">1</div>
+                <div class="step-details">
+                  <h4>64-Digit End-to-End Encrypted Backup Key (Crypt15)</h4>
+                  <p>If you enable <em>"End-to-end encrypted backup"</em> under <strong>WhatsApp Settings &gt; Chats
+                      &gt; Chat backup</strong>, WhatsApp provides a 64-character hexadecimal key. You can type or paste
+                    that key directly into this app.</p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">2</div>
+                <div class="step-details">
+                  <h4>158-Byte Key File (Crypt12 / Crypt14)</h4>
+                  <p>This file is generated automatically by the WhatsApp system at
+                    <code>/data/data/com.whatsapp/files/key</code>. The last 32 bytes of this file contain the secret
+                    AES-256 key used to decrypt the database.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 4: FAQ & Privacy -->
+          <div class="guide-tab-content" id="tab-faq" style="display: none;">
+            <div class="guide-step-list">
+              <div class="guide-step-item">
+                <div class="step-number">🔒</div>
+                <div class="step-details">
+                  <h4>Is my WhatsApp chat data secure?</h4>
+                  <p><strong>Completely secure.</strong> This app performs 100% of decryption and database parsing
+                    locally in your browser using WebCrypto and WebAssembly. No data bytes, chat texts, or keys are ever
+                    transmitted to any remote server.</p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">⚡</div>
+                <div class="step-details">
+                  <h4>Do I need to provide a key for a standard msgstore.db?</h4>
+                  <p>No! If your uploaded file is an unencrypted SQLite file (directly extracted or already decrypted),
+                    the viewer automatically detects it and opens the chat history immediately without prompting for a
+                    key.</p>
+                </div>
+              </div>
+
+              <div class="guide-step-item">
+                <div class="step-number">📎</div>
+                <div class="step-details">
+                  <h4>How do media attachments &amp; documents work?</h4>
+                  <p>WhatsApp stores chat history, metadata, and low-res thumbnails inside <code>msgstore.db</code>, while full-resolution photos, videos, and documents stay in your phone's storage. In the viewer, thumbnails, document names, voice notes, locations, and stickers appear automatically. You can also click the <strong>Link Media Folder</strong> icon in the header to connect your local <code>WhatsApp/Media</code> folder and view original files directly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         VIEW 2: STEP 2 MODAL - REQUEST KEY IF FILE IS ENCRYPTED
+         ====================================================================== -->
+    <div class="modal-overlay" id="keyModal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>
+            <svg style="width: 20px; height: 20px; fill: var(--wa-green-primary);" viewBox="0 0 24 24">
+              <path
+                d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+            </svg>
+            Decryption Key Required
+          </h3>
+          <button class="icon-btn" id="btnCloseKeyModal" title="Close Modal">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="file-info-badge">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+            </svg>
+            <div class="file-info-text">
+              <h4 id="targetFileName">msgstore.db.crypt14</h4>
+              <p id="targetFileSize">15.4 MB &bull; Crypt Encrypted Detected</p>
+            </div>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-secondary);">
+            This database is encrypted. Please upload your WhatsApp <code>key</code> file (158 bytes), or type in your
+            64-character Hex Key.
+          </p>
+
+          <!-- Dropzone File Key -->
+          <div class="key-dropzone" id="keyDropzone">
+            <input type="file" id="keyFileInput" class="file-input-hidden" accept="*/*">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+            </svg>
+            <h5 id="keyFilePromptTitle">Select or Drag &amp; Drop "key" File Here</h5>
+            <p id="keyFilePromptSub">Standard file size: 158 bytes or 32 bytes</p>
+          </div>
+
+          <div class="divider-text">
+            <span>OR ENTER MANUALLY</span>
+          </div>
+
+          <div class="input-group">
+            <label for="hexKeyInput">64-Digit Hexadecimal Key (Crypt15 / Raw AES):</label>
+            <input type="text" id="hexKeyInput" class="input-text"
+              placeholder="Example: a1b2c3d4e5f60718... (64 hex characters)" maxlength="64">
+          </div>
+
+          <div id="keyStatusAlert" class="status-alert error" style="display: none;">
+            <span id="keyStatusText">Invalid key.</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnCancelKey">Cancel</button>
+          <button class="btn-primary" id="btnDecryptSubmit">
+            <span id="decryptBtnText">Decrypt &amp; Open Chat</span>
+            <div id="decryptSpinner" class="spinner"
+              style="display: none; width: 18px; height: 18px; border-width: 2px;"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         VIEW 3: INTERACTIVE WHATSAPP WEB UI CHAT VIEWER
+         ====================================================================== -->
+    <main class="view-whatsapp" id="viewWhatsApp" style="display: none;">
+      <!-- Left Sidebar: Chat List -->
+      <aside class="sidebar" id="sidebar">
+        <header class="sidebar-header">
+          <div class="user-profile">
+            <div class="avatar" id="myAvatar">WA</div>
+            <div class="profile-meta">
+              <h4>WhatsApp Viewer</h4>
+              <p id="loadedDbName">msgstore.db</p>
+            </div>
+          </div>
+
+          <div class="sidebar-header-actions">
+            <button class="icon-btn" id="btnLinkMedia" title="Link Local WhatsApp Media Folder (Optional to view original photos &amp; documents)">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+              </svg>
+            </button>
+            <button class="icon-btn" id="btnExportAll" title="Export All Chats (JSON)">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Search Bar & Category Chips -->
+        <div class="search-container">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <input type="text" id="chatSearchInput" class="search-input" placeholder="Search or start new chat">
+          </div>
+
+          <div class="filter-chips">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="unread">Unread</button>
+            <button class="filter-chip" data-filter="groups">Groups</button>
+            <button class="filter-chip" data-filter="personal">Contacts</button>
+          </div>
+        </div>
+
+        <!-- Chat Items List -->
+        <ul class="chat-list" id="chatList">
+          <!-- Dynamically populated by JavaScript -->
+        </ul>
+      </aside>
+
+      <!-- Right Main Chat Window -->
+      <section class="main-chat-window" id="mainChatWindow">
+        <div class="chat-doodle-bg"></div>
+
+        <!-- Empty State (When no chat is selected) -->
+        <div class="empty-chat-state" id="emptyChatState">
+          <div class="empty-chat-graphic">
+            <svg viewBox="0 0 300 200" fill="none">
+              <rect x="50" y="30" width="200" height="130" rx="12" fill="var(--bg-header)" stroke="var(--border-light)"
+                stroke-width="2" />
+              <circle cx="150" cy="85" r="28" fill="var(--wa-green-primary)" opacity="0.9" />
+              <path d="M140 85 L147 92 L162 77" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <rect x="90" y="125" width="120" height="8" rx="4" fill="var(--text-muted)" opacity="0.4" />
+              <rect x="110" y="139" width="80" height="6" rx="3" fill="var(--text-muted)" opacity="0.3" />
+            </svg>
+          </div>
+          <h2>WhatsApp for Web</h2>
+          <p>Select a conversation from the left sidebar to view the full chat history including text messages, photos,
+            voice notes, documents, and locations.</p>
+          <div class="encrypted-lock-notice">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+            </svg>
+            <span>End-to-end encrypted from your database</span>
+          </div>
+        </div>
+
+        <!-- Active Chat Container (When a chat is selected) -->
+        <div class="active-chat-container" id="activeChatContainer" style="display: none;">
+          <!-- Chat Header -->
+          <header class="chat-header">
+            <div class="chat-header-info" id="chatHeaderInfo">
+              <button class="icon-btn btn-back-to-list" id="btnBackToList" title="Back to Chat List">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                </svg>
+              </button>
+              <div class="avatar" id="activeChatAvatar">A</div>
+              <div class="chat-header-text">
+                <h3 id="activeChatTitle">Contact Name</h3>
+                <p id="activeChatSub">online</p>
+              </div>
+            </div>
+
+            <div class="chat-header-actions">
+              <button class="icon-btn" id="btnToggleInChatSearch" title="Search in Chat">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+              </button>
+              <button class="icon-btn" id="btnExportChat" title="Export This Chat (TXT)">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
+                </svg>
+              </button>
+              <button class="icon-btn" id="btnToggleInfoDrawer" title="Contact / Group Info">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <!-- In-Chat Search Bar Overlay -->
+          <div class="inchat-search-bar" id="inChatSearchBar" style="display: none;">
+            <svg style="width: 18px; height: 18px; fill: var(--text-secondary);" viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <input type="text" id="inChatSearchInput" class="inchat-search-input"
+              placeholder="Search messages in this chat...">
+            <span class="search-matches-counter" id="inChatSearchMatches">0 results</span>
+            <button class="icon-btn" id="btnCloseInChatSearch">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Messages Scrollable Canvas -->
+          <div class="messages-viewport" id="messagesViewport">
+            <!-- Messages dynamically rendered here by JavaScript -->
+          </div>
+
+          <!-- Drag & Drop Overlay for Active Chat -->
+          <div id="chatDropOverlay" class="chat-drop-overlay" style="display: none;">
+            <div class="drop-overlay-box">
+              <div class="drop-overlay-icon">
+                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" /></svg>
+              </div>
+              <h3>Drop WhatsApp Media Files Here</h3>
+              <p>Drag photos, videos, documents, or your WhatsApp Images folder directly into this chat</p>
+            </div>
+          </div>
+
+          <!-- Bottom Status Bar (Read Only Viewer Mode) -->
+          <div class="chat-bottom-bar">
+            <div class="chat-input-dummy">
+              <span>🔒 Viewer Mode: Offline encrypted chat history (Read Only)</span>
+              <span id="activeMsgCount" style="font-size: 11px; color: var(--text-muted);">0 Messages</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Slide-Out Info Drawer (Contact & Group Details) -->
+      <aside class="info-drawer" id="infoDrawer" style="display: none;">
+        <header class="info-drawer-header">
+          <button class="icon-btn" id="btnCloseInfoDrawer">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          </button>
+          <h3 id="infoDrawerTitle">Contact Info</h3>
+        </header>
+
+        <div class="info-drawer-body">
+          <div class="info-profile-section">
+            <div class="info-large-avatar" id="infoAvatar">A</div>
+            <h2 id="infoName">Contact Name</h2>
+            <p id="infoPhone">+1 234 567 8900</p>
+          </div>
+
+          <div class="info-meta-card">
+            <h4>About / Description</h4>
+            <p id="infoAbout">Hey there! I am using WhatsApp.</p>
+          </div>
+
+          <div class="info-meta-card">
+            <h4>Encryption</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+              Messages and calls in this chat are end-to-end encrypted. No one outside of this chat can read or listen
+              to them.
+            </p>
+          </div>
+
+          <div class="info-meta-card" id="infoParticipantsBox" style="display: none;">
+            <h4>Group Members</h4>
+            <ul id="infoParticipantsList"
+              style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+              <!-- Group members list -->
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Link Media Folder Modal -->
+    <div class="modal-overlay" id="mediaModal" style="display: none;">
+      <div class="modal-card" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+          <h3>
+            <svg style="width: 22px; height: 22px; fill: var(--wa-green-primary);" viewBox="0 0 24 24">
+              <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+            </svg>
+            Link WhatsApp Media (Photos &amp; Documents)
+          </h3>
+          <button class="icon-btn" id="btnCloseMediaModal" title="Close Modal">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="overflow-y: auto; padding-right: 12px;">
+          <!-- Hidden File Pickers -->
+          <input type="file" id="mediaFolderPicker" webkitdirectory mozdirectory directory class="file-input-hidden">
+          <input type="file" id="mediaFilesPicker" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.opus,.mp3,.m4a" class="file-input-hidden">
+          <input type="file" id="mediaZipPicker" accept=".zip" class="file-input-hidden">
+          <input type="file" id="singleMediaPicker" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.opus,.mp3,.m4a" class="file-input-hidden">
+
+          <!-- Diagnostic Missing Media in Current Chat (if any) -->
+          <div id="mediaMissingChatSection" style="margin-bottom: 14px; display: none;">
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Media Dicari di Chat Ini (<span id="mediaMissingCount">0</span> file):</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Klik untuk cari file langsung</span>
+            </div>
+            <div id="mediaMissingList" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto; padding: 2px;">
+              <!-- Dynamic missing list items -->
+            </div>
+          </div>
+
+          <!-- Dropzone for Folder / Files / ZIP -->
+          <div class="dropzone-container" id="mediaDropzone" style="padding: 20px 16px; margin: 4px 0 14px; border: 2px dashed var(--border-subtle); border-radius: 12px; text-align: center; transition: all 0.2s ease;">
+            <div class="dropzone-icon-circle" style="width: 46px; height: 46px; margin: 0 auto 10px; background: rgba(0, 168, 132, 0.12); color: var(--wa-green-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
+              </svg>
+            </div>
+            <h4 style="font-size: 14.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Drag &amp; Drop Folder atau File Foto ke Sini</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Tarik folder <code>WhatsApp Images</code>, file foto, atau file <code>.zip</code> dari Finder</p>
+            
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-primary" id="btnSelectFolder" type="button" style="padding: 7px 14px; font-size: 12.5px;">
+                <svg style="width: 15px; height: 15px; fill: currentColor;" viewBox="0 0 24 24">
+                  <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                </svg>
+                Pilih Folder Media
+              </button>
+              <button class="btn-secondary" id="btnSelectFiles" type="button" style="padding: 7px 14px; font-size: 12.5px;">
+                <svg style="width: 15px; height: 15px; fill: currentColor;" viewBox="0 0 24 24">
+                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+                Pilih File Foto Langsung
+              </button>
+              <button class="btn-secondary" id="btnSelectZip" type="button" style="padding: 7px 14px; font-size: 12.5px;" title="Extract WhatsApp media from backup .zip">
+                <svg style="width: 15px; height: 15px; fill: currentColor;" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                Buka File ZIP (.zip)
+              </button>
+            </div>
+          </div>
+
+          <!-- Linked Status Display & Warning -->
+          <div id="mediaStatusBox" style="background: rgba(0, 168, 132, 0.08); border: 1px solid rgba(0, 168, 132, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg style="width: 18px; height: 18px; fill: var(--wa-green-primary);" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <span id="mediaStatusText" style="font-size: 13.5px; font-weight: 600; color: var(--text-primary);">0 files linked</span>
+              </div>
+              <button id="btnClearMedia" type="button" style="color: #ea4335; font-size: 12px; background: none; border: none; cursor: pointer; text-decoration: underline;">Hapus Semua</button>
+            </div>
+            <p id="mediaStatusBreakdown" style="font-size: 11.5px; color: var(--text-secondary); margin-top: 6px; margin-bottom: 0;"></p>
+            <div id="mediaStatusWarning" style="margin-top: 8px; padding: 8px 10px; background: rgba(234, 67, 53, 0.12); border-left: 3px solid #ea4335; border-radius: 4px; font-size: 11.5px; color: #ea4335; display: none;"></div>
+          </div>
+
+          <!-- Step by Step Guidance -->
+          <div style="background: rgba(0, 0, 0, 0.06); border-left: 3px solid var(--wa-green-primary); padding: 10px 14px; border-radius: 4px; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+            <strong>💡 Di mana menemukan foto WhatsApp?</strong><br>
+            Database <code>msgstore.db.crypt15</code> hanya menyimpan teks chat. Foto asli (seperti <code>IMG-20261005-WA0009.jpg</code>) ada di HP Anda pada folder:
+            <br>
+            <code style="display: inline-block; margin-top: 4px; padding: 2px 6px; background: rgba(0,0,0,0.2); border-radius: 4px; word-break: break-all;">
+              Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images
+            </code>
+            <br>
+            Salin folder <strong>WhatsApp Images</strong> tersebut ke komputer Anda, lalu klik <strong>Pilih File Foto Langsung</strong> atau <strong>Pilih Folder Media</strong> di atas. Anda juga bisa menarik langsung fotonya ke layar chat!
+          </div>
+        </div>
+
+        <div class="modal-footer" style="padding: 12px 20px; border-top: 1px solid var(--border-light); display: flex; justify-content: flex-end;">
+          <button class="btn-primary" id="btnCloseMediaModalFooter" type="button">Selesai (Tutup)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox Modal for Photo Preview -->
+    <div class="modal-overlay" id="imageLightboxModal" style="display: none;">
+      <div
+        style="position: relative; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center;">
+        <button class="icon-btn" id="btnCloseLightbox"
+          style="position: absolute; top: -45px; right: 0; color: #ffffff;">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          </svg>
+        </button>
+        <img id="lightboxImage" src="" alt="Media Preview"
+          style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: var(--shadow-lg);">
+        <p id="lightboxCaption" style="color: #ffffff; margin-top: 10px; font-size: 14px; text-align: center;"></p>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+  <!-- Script Libraries (CDN with graceful fallback) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.12.0/sql-wasm.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Application Modules -->
+  <script src="decryptor.js"></script>
+  <script src="demo-data.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
