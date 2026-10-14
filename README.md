@@ -18,6 +18,11 @@ An interactive, client-side web application to open, decrypt, and view WhatsApp 
 3. **Authentic WhatsApp Web Experience**:
    - **Conversation Sidebar**: Real-time search, category filters (*All*, *Unread*, *Groups*, *Contacts*), unread count badges, pin icons, color-coded avatars, and last message previews with delivery ticks (`✓✓`).
    - **Full Unlimited Message History**: No artificial message caps (`LIMIT 300` removed); conversations load smoothly on-demand with DOM fragment optimization.
+   - **Local Media Linking & Drag & Drop**:
+     - Direct **"📁 Locate File"** button on missing media cards to immediately attach specific photos from your computer.
+     - Direct **Drag & Drop** of photos, videos, documents, or your `WhatsApp Images` folder directly onto the chat window.
+     - Automatic in-memory extraction of backup **`.zip` archives** (e.g. from Google Drive or device backup).
+     - Modern File System Access API support (`showDirectoryPicker`) for linking your local `WhatsApp/Media` folder.
    - **Rich Message Types**:
      - Formatted text supporting WhatsApp markdown (`*bold*`, `_italic_`, `~strikethrough~`, ````code````) and auto-linked URLs.
      - Photo messages with captions and an interactive lightbox modal preview.
@@ -34,7 +39,20 @@ An interactive, client-side web application to open, decrypt, and view WhatsApp 
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Deploy to GitHub Pages (Live Web Demo)
+
+Because this application runs **100% client-side with zero build step required**, you can host it freely on **GitHub Pages**:
+
+1. Go to your repository **Settings** on GitHub.
+2. Under the **Code and automation** section in the left sidebar, click **Pages**.
+3. Under **Build and deployment**:
+   - Source: **Deploy from a branch**
+   - Branch: **`main`** / Folder: **`/ (root)`**
+4. Click **Save**. Your WhatsApp Viewer will be live at `https://<username>.github.io/<repository-name>/`!
+
+---
+
+## 🚀 Getting Started Locally
 
 This application is built with vanilla **HTML5, Vanilla CSS, and JavaScript**. You can run it locally with any web server:
 
